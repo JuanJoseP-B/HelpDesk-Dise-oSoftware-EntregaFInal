@@ -32,7 +32,8 @@ Estructura relacional de los datos, asegurando la integridad entre Usuarios, Tic
 
 ### 3. Diagrama de Clases UML (Backend)
 Representación de la Programación Orientada a Objetos en el core de la aplicación, implementando patrones de diseño para el manejo de estados.
-![Diagrama de Clases](docs/images/class-diagram.png)
+![DiagramaClasesV2](https://github.com/user-attachments/assets/462c4d9b-b9f6-491b-8c8c-18c7ffa8d369)
+
 
 ### 4. Flujo de Estados del Ticket
 Ciclo de vida que dicta cómo interactúan el cliente y el técnico a lo largo de la resolución de la incidencia.
