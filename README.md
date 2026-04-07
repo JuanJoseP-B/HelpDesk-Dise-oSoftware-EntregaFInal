@@ -23,8 +23,8 @@ El sistema ha sido diseñado priorizando la escalabilidad y la separación de re
 
 ### 1. Diagrama de Contexto (C4 - Nivel 1)
 Muestra la interacción del sistema con los actores humanos y los sistemas externos (LDAP, SMTP, Monitoreo).
-![Diagrama de Contexto](docs/images/context-diagram.png) 
-*(Nota: Reemplaza esta ruta con la ubicación real de tu imagen)*
+![Diagrama de Contexto](<img width="551" height="399" alt="diagramaDeContexto drawio" src="https://github.com/user-attachments/assets/b4406150-ffb2-4037-be38-42e96cc8d31d" />) 
+
 
 ### 2. Diagrama Entidad-Relación (Base de Datos)
 Estructura relacional de los datos, asegurando la integridad entre Usuarios, Tickets, Categorías y Comentarios.
