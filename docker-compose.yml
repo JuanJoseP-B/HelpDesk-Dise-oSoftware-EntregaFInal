@@ -1,0 +1,28 @@
+﻿version: "3.8"
+
+services:
+  db:
+    image: postgres:15-alpine
+    container_name: helpdesk-db
+    environment:
+      - POSTGRES_DB=helpdesk
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    ports:
+      - "5432:5432"
+
+  app:
+    build: .
+    container_name: helpdesk-app
+    depends_on:
+      - db
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/helpdesk
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=postgres
+      - JWT_SECRET=mySecretKeyForJWTAuthenticationMustBeLongEnough
+      - MAIL_HOST=smtp.gmail.com
+      - MAIL_USERNAME=test@gmail.com
+      - MAIL_PASSWORD=password

@@ -1,65 +1,83 @@
-# 🛠️ Help Desk Ticketing System
+﻿# 🛠️ Help Desk API (Arquitectura Hexagonal)
 
-Un sistema de gestión de incidencias (Help Desk) de nivel intermedio diseñado para optimizar el soporte técnico interno. Este proyecto permite a los empleados reportar problemas, a los técnicos gestionar y resolver tickets, y a los administradores supervisar el flujo de trabajo general.
+Sistema Backend API REST para la gestión de incidencias y soporte técnico (Service Desk).
 
-## 📋 Tabla de Contenidos
-- [Características Principales](#-características-principales)
-- [Arquitectura y Diseño](#-arquitectura-y-diseño)
-- [Stack Tecnológico](#-stack-tecnológico)
-- [Estructura del Proyecto](#-estructura-del-proyecto)
-- [Instalación y Despliegue (Local)](#-instalación-y-despliegue-local)
-- [Flujo de Trabajo (GitFlow)](#-flujo-de-trabajo-gitflow)
+## 📄 Contexto del Proyecto
+Este sistema permite la gestión completa del ciclo de vida de incidencias, desde su creación por parte del cliente hasta su resolución y cierre por técnicos o administradores, garantizando el cumplimiento de los Acuerdos de Nivel de Servicio (SLAs).
 
-## 🚀 Características Principales
+### 👥 Actores
+- **Cliente:** Crea incidencias, consulta estado, recibe notificaciones.
+- **Técnico:** Gestiona tickets asignados, añade comentarios, resuelve incidencias.
+- **Administrador:** Gestión de usuarios, configuración de SLAs, asignación manual, reportes.
 
-* **Gestión de Roles:** Soporte para tres tipos de usuarios (Cliente, Técnico, Administrador) con permisos específicos.
-* **Ciclo de Vida del Ticket:** Trazabilidad completa del estado de una incidencia (`Abierto` -> `Asignado` -> `En Progreso` -> `Resuelto` -> `Cerrado`).
-* **Asignación Inteligente:** Flujo automatizado para asignar tickets a técnicos disponibles según la categoría del problema.
-* **Integraciones Externas:** Autenticación mediante Directorio LDAP corporativo y notificaciones vía correo electrónico (SMTP).
+### 🔄 Flujo de Estados
+ABIERTO ➔ ASIGNADO ➔ EN_PROGRESO ➔ RESUELTO ➔ CERRADO
 
-## 🏗️ Arquitectura y Diseño
-
-El sistema ha sido diseñado priorizando la escalabilidad y la separación de responsabilidades. A continuación se detallan los diagramas clave que fundamentan la lógica del negocio:
+## 📐 Diseño y Arquitectura
 
 ### 1. Diagrama de Contexto (C4 - Nivel 1)
 Muestra la interacción del sistema con los actores humanos y los sistemas externos (LDAP, SMTP, Monitoreo).
- <img width="551" height="399" alt="diagramaDeContexto drawio" src="https://github.com/user-attachments/assets/b4406150-ffb2-4037-be38-42e96cc8d31d" />
+<img width="551" height="399" alt="diagramaDeContexto drawio" src="https://github.com/user-attachments/assets/b4406150-ffb2-4037-be38-42e96cc8d31d" />
 
-
-### 2. Diagrama Entidad-Relación (Base de Datos)
-Estructura relacional de los datos, asegurando la integridad entre Usuarios, Tickets, Categorías y Comentarios.
-![Diagrama ER](docs/images/er-diagram.png)
+### 2. Arquitectura Hexagonal
+El proyecto sigue los principios de la **Arquitectura Hexagonal (Ports & Adapters)**:
+- **Dominio:** Lógica de negocio pura (Entidades, Value Objects, Puertos, Eventos).
+- **Aplicación:** Casos de uso y orquestación (CQRS).
+- **Infraestructura:** Adaptadores técnicos (JPA, JWT, Mail, Spring).
+- **Presentación:** Adaptadores de entrada (REST Controllers).
 
 ### 3. Diagrama de Clases UML (Backend)
 Representación de la Programación Orientada a Objetos en el core de la aplicación, implementando patrones de diseño para el manejo de estados.
 ![DiagramaClasesV2](https://github.com/user-attachments/assets/462c4d9b-b9f6-491b-8c8c-18c7ffa8d369)
 
-
-### 4. Flujo de Estados del Ticket
-Ciclo de vida que dicta cómo interactúan el cliente y el técnico a lo largo de la resolución de la incidencia.
-![Diagrama de Estados](docs/images/state-machine.png)
-
 ## 💻 Stack Tecnológico
+- **Java 17**
+- **Spring Boot 3.2.0**
+- **Spring Data JPA (PostgreSQL)**
+- **Spring Security + JWT**
+- **Spring Mail (SMTP)**
+- **MapStruct & Lombok** (Lombok solo en infra/presentación)
+- **JUnit 5 & Mockito**
+- **Maven**
 
-**Backend:**
-* **Java:** Lógica principal.
-* **Framework:** Spring Boot (Web, Data JPA, Security).
-* **Base de Datos:** PostgreSQL.
-* **Autenticación:** Spring Security LDAP / JWT.
+## 📂 Estructura de Paquetes
+```
+com.helpdesk
++-- application       # Casos de uso, DTOs, Commands
++-- domain            # Entidades, Enums, Puertos de Repositorio
++-- infrastructure    # Implementaciones JPA, Security, Mail, Config
++-- presentation      # Controllers REST, Exception Handling
+```
 
-**Frontend:**
-* **Lenguaje:** TypeScript.
-* **Framework/Librería:** [Aquí pones React, Angular o Vue según elijas].
-* **Estilos:** [Ej: Tailwind CSS / Material-UI].
+## 🚀 Configuración e Instalación
 
-## ⚙️ Instalación y Despliegue (Local)
+### Requisitos
+- JDK 17
+- Maven 3.8+
+- PostgreSQL 15+
 
-### Requisitos previos
-* Java Development Kit (JDK) 17 o superior.
-* Node.js (v18+) y npm/yarn.
-* PostgreSQL instalado y corriendo.
+### Variables de Entorno
+Configure las siguientes variables en su entorno o en `src/main/resources/application.yml`:
+- `DB_URL`: URL de la base de datos PostgreSQL.
+- `DB_USERNAME`: Usuario de la DB.
+- `DB_PASSWORD`: Contraseña de la DB.
+- `JWT_SECRET`: Clave secreta para tokens JWT.
+- `MAIL_HOST`: Servidor SMTP.
+- `MAIL_USERNAME`: Usuario SMTP.
+- `MAIL_PASSWORD`: Contraseña SMTP.
 
-### Pasos
-1. Clona el repositorio:
-   ```bash
-   git clone [https://github.com/tu-usuario/help-desk-system.git](https://github.com/tu-usuario/help-desk-system.git)
+### Ejecución
+```bash
+mvn clean install
+mvn spring-boot:run
+```
+
+## 🧪 Tests
+Para ejecutar la suite de pruebas completa:
+```bash
+mvn clean verify
+```
+Esto ejecutará tanto los tests unitarios (`*Test.java`) como los de integración (`*IT.java`).
+
+## 📄 Licencia
+Este proyecto está bajo la licencia MIT - vea el archivo [LICENSE](LICENSE) para detalles.
